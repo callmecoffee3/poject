@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyTube - Video Showcase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for a sleek dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a202c; /* Dark background for the track */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568; /* Greyish thumb */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #718096; /* Lighter grey on hover */
+        }
+        /* Utility class to hide elements */
+        .hidden-element {
+            display: none;
+        }
+        /* Styles for the modal overlay background */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 20; /* Ensures it appears above other content */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+    <header class="bg-gray-800 p-4 shadow-md">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-red-500">MyTube</h1>
+            <div class="relative w-full max-w-md mx-4">
+                <input type="text" placeholder="Search" class="w-full bg-gray-700 text-gray-100 rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-red-500">
+                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div id="liveClock" class="text-gray-300 text-sm font-medium hidden md:block"></div>
+
+                <button class="text-gray-300 hover:text-white focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                </button>
+                <button class="text-gray-300 hover:text-white focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                </button>
+                <div class="relative">
+                    <button id="moreButton" class="text-gray-300 hover:text-white focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <div id="popupMenu" class="hidden-element absolute right-0 mt-2 w-48 bg-gray-700 rounded-lg shadow-xl py-2 z-10">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-600">Settings</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-600">Help</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-600">Send feedback</a>
+                        <hr class="border-gray-600 my-1">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-600">Sign out</a>
+                    </div>
+                </div>
+                <button id="profileButton" class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-sm font-semibold hover:bg-blue-600 focus:outline-none transition-colors duration-200">
+                    JD
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-200 hover:scale-105">
+            <div class="relative w-full h-48 bg-gray-700 flex items-center justify-center">
+                <iframe
+                    class="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    title="Rick Astley - Never Gonna Give You Up (Official Music Video)"
+                ></iframe>
+            </div>
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-50 mb-2">Never Gonna Give You Up</h2>
+                <p class="text-sm text-gray-400">Rick Astley</p>
+                <p class="text-xs text-gray-500">6.5M views • 1 year ago</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-200 hover:scale-105">
+            <div class="relative w-full h-48 bg-gray-700 flex items-center justify-center">
+                <iframe
+                    class="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/xvFZjo5PgG0"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    title="Lo-fi hip hop radio - beats to relax/study to"
+                ></iframe>
+            </div>
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-50 mb-2">Lo-fi hip hop radio</h2>
+                <p class="text-sm text-gray-400">Lofi Girl</p>
+                <p class="text-xs text-gray-500">500M views • 6 years ago</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-200 hover:scale-105">
+            <div class="relative w-full h-48 bg-gray-700 flex items-center justify-center">
+                <iframe
+                    class="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/kXYiU_JCYtM"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    title="A Day in the Life of a Software Engineer"
+                ></iframe>
+            </div>
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-50 mb-2">A Day in the Life of a Software Engineer</h2>
+                <p class="text-sm text-gray-400">Tech Insights</p>
+                <p class="text-xs text-gray-500">1.2M views • 3 months ago</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-200 hover:scale-105">
+            <div class="relative w-full h-48 bg-gray-700 flex items-center justify-center">
+                <iframe
+                    class="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/tgbNymZ7vqY"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    title="HTML Tutorial for Beginners"
+                ></iframe>
+            </div>
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-50 mb-2">HTML Tutorial for Beginners</h2>
+                <p class="text-sm text-gray-400">Web Dev Simplified</p>
+                <p class="text-xs text-gray-500">3.8M views • 2 years ago</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-200 hover:scale-105">
+            <div class="relative w-full h-48 bg-gray-700 flex items-center justify-center">
+                <iframe
+                    class="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/yKz08g5Kj54"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    title="Learn Python - Full Course for Beginners"
+                ></iframe>
+            </div>
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-50 mb-2">Learn Python - Full Course</h2>
+                <p class="text-sm text-gray-400">freeCodeCamp.org</p>
+                <p class="text-xs text-gray-500">15M views • 4 years ago</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-200 hover:scale-105">
+            <div class="relative w-full h-48 bg-gray-700 flex items-center justify-center">
+                <iframe
+                    class="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/DLX62G4lcFs"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    title="The Science of Sleep"
+                ></iframe>
+            </div>
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-50 mb-2">The Science of Sleep</h2>
+                <p class="text-sm text-gray-400">Kurzgesagt – In a Nutshell</p>
+                <p class="text-xs text-gray-500">25M views • 2 years ago</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-200 hover:scale-105">
+            <div class="relative w-full h-48 bg-gray-700 flex items-center justify-center">
+                <iframe
+                    class="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/N_sC-J0h-hU"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    title="Cooking Basics: How to Chop an Onion"
+                ></iframe>
+            </div>
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-50 mb-2">How to Chop an Onion</h2>
+                <p class="text-sm text-gray-400">Food Network</p>
+                <p class="text-xs text-gray-500">800K views • 9 months ago</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-200 hover:scale-105">
+            <div class="relative w-full h-48 bg-gray-700 flex items-center justify-center">
+                <iframe
+                    class="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/k-Lq1i3l1_c"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    title="Top 10 Travel Destinations"
+                ></iframe>
+            </div>
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-gray-50 mb-2">Top 10 Travel Destinations</h2>
+                <p class="text-sm text-gray-400">Travel Channel</p>
+                <p class="text-xs text-gray-500">2.1M views • 1 year ago</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="profilePopup" class="modal-overlay hidden-element">
+        <div class="bg-gray-800 rounded-lg shadow-xl p-6 w-11/12 max-w-md relative">
+            <h2 class="text-2xl font-bold text-gray-50 mb-6 text-center">Edit Profile</h2>
+
+            <div class="mb-4">
+                <label for="profileName" class="block text-gray-300 text-sm font-bold mb-2">Name:</label>
+                <input type="text" id="profileName" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-red-500" placeholder="Your Name">
+            </div>
+            <div class="mb-4">
+                <label for="profileEmail" class="block text-gray-300 text-sm font-bold mb-2">Email:</label>
+                <input type="email" id="profileEmail" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-red-500" placeholder="your.email@example.com">
+            </div>
+            <div class="mb-6">
+                <label for="profileBio" class="block text-gray-300 text-sm font-bold mb-2">Bio:</label>
+                <textarea id="profileBio" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-700 text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-red-500" placeholder="Tell us about yourself..."></textarea>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <button id="saveProfile" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                    Save Changes
+                </button>
+                <button id="cancelProfile" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import necessary Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variables for Firebase instances and user ID
+        let app;
+        let db;
+        let auth;
+        let userId;
+
+        // Get environment variables for Firebase configuration and authentication
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'my-default-app'; // Fallback for local development
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Initialize Firebase
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            console.log("Firebase initialized successfully.");
+        } catch (error) {
+            console.error("Error initializing Firebase:", error);
+            alert("Failed to initialize Firebase. Please check your environment settings.");
+        }
+
+        // Authenticate user anonymously or with a custom token
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                userId = user.uid;
+                console.log("User authenticated:", userId);
+                listenForProfileChanges(userId); // Start listening for profile updates
+            } else {
+                try {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously.");
+                    }
+                } catch (error) {
+                    console.error("Error during authentication:", error);
+                    alert("Failed to authenticate. Please try again later.");
+                }
+            }
+        });
+
+        // Helper function to get initials from a full name
+        function getInitials(name) {
+            if (!name) return 'JD'; // Default if no name provided
+            const parts = name.split(' ').filter(part => part.length > 0);
+            if (parts.length === 0) return 'JD';
+            if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+            return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+        }
+
+        // Function to update the profile UI elements (inputs and header button)
+        function updateProfileUI(profileData) {
+            const profileNameInput = document.getElementById('profileName');
+            const profileEmailInput = document.getElementById('profileEmail');
+            const profileBioInput = document.getElementById('profileBio');
+            const profileButton = document.getElementById('profileButton'); // The "JD" button
+
+            if (profileData) {
+                profileNameInput.value = profileData.name || '';
+                profileEmailInput.value = profileData.email || '';
+                profileBioInput.value = profileData.bio || '';
+                profileButton.textContent = getInitials(profileData.name);
+            } else {
+                // Set default placeholder values if no data exists
+                profileNameInput.value = '';
+                profileEmailInput.value = '';
+                profileBioInput.value = '';
+                profileButton.textContent = 'JD';
+            }
+        }
+
+        // Listens for real-time changes to the user's profile document in Firestore
+        function listenForProfileChanges(currentUserId) {
+            if (!db || !currentUserId) {
+                console.warn("Firestore or userId not available for profile listening.");
+                return;
+            }
+
+            const profileDocRef = doc(db, `artifacts/${appId}/users/${currentUserId}/profile/data`);
+
+            onSnapshot(profileDocRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const profileData = docSnap.data();
+                    console.log("Real-time profile data received:", profileData);
+                    updateProfileUI(profileData); // Update UI with new data
+                } else {
+                    console.log("No profile data found for user. Displaying defaults.");
+                    updateProfileUI(null); // Reset UI to default
+                }
+            }, (error) => {
+                console.error("Error listening to profile data:", error);
+                alert("Failed to load profile data. Please check your connection.");
+            });
+        }
+
+        // Get references to all interactive elements
+        const moreButton = document.getElementById('moreButton');
+        const popupMenu = document.getElementById('popupMenu');
+        const profileButton = document.getElementById('profileButton');
+        const profilePopup = document.getElementById('profilePopup');
+        const cancelProfileButton = document.getElementById('cancelProfile');
+        const saveProfileButton = document.getElementById('saveProfile');
+        const liveClock = document.getElementById('liveClock'); // Get the clock element
+
+        // Function to toggle the visibility of the "More" pop-up menu
+        function toggleMoreMenu() {
+            popupMenu.classList.toggle('hidden-element');
+            // Ensure profile popup is hidden if More menu is opened
+            if (!profilePopup.classList.contains('hidden-element')) {
+                profilePopup.classList.add('hidden-element');
+            }
+        }
+
+        // Function to show the profile pop-up
+        function showProfilePopup() {
+            profilePopup.classList.remove('hidden-element');
+            // Ensure More menu is hidden if profile popup is opened
+            if (!popupMenu.classList.contains('hidden-element')) {
+                popupMenu.classList.add('hidden-element');
+            }
+        }
+
+        // Function to hide the profile pop-up
+        function hideProfilePopup() {
+            profilePopup.classList.add('hidden-element');
+        }
+
+        // Event listener for the "More" button to toggle its menu
+        moreButton.addEventListener('click', function(event) {
+            event.stopPropagation(); // Prevent clicks from bubbling up and immediately closing the menu
+            toggleMoreMenu();
+        });
+
+        // Event listener for the profile button to show the profile pop-up
+        profileButton.addEventListener('click', function(event) {
+            event.stopPropagation(); // Prevent clicks from bubbling up
+            showProfilePopup();
+        });
+
+        // Event listener for the "Cancel" button within the profile pop-up
+        cancelProfileButton.addEventListener('click', hideProfilePopup);
+
+        // Event listener for the "Save Changes" button in the profile pop-up
+        saveProfileButton.addEventListener('click', async function() {
+            if (!userId || !db) {
+                console.error("User not authenticated or Firestore not initialized. Cannot save profile.");
+                alert("Cannot save profile. Please ensure you are authenticated.");
+                return;
+            }
+
+            const name = document.getElementById('profileName').value;
+            const email = document.getElementById('profileEmail').value;
+            const bio = document.getElementById('profileBio').value;
+
+            const profileData = {
+                name: name,
+                email: email,
+                bio: bio
+            };
+
+            try {
+                // Reference to the user's specific profile document in Firestore
+                const profileDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile/data`);
+                // Save the data, merging with existing document data
+                await setDoc(profileDocRef, profileData, { merge: true });
+                console.log("Profile saved successfully!");
+                hideProfilePopup(); // Close the pop-up after saving
+            } catch (error) {
+                console.error("Error saving profile:", error);
+                alert("Failed to save profile changes. Please try again.");
+            }
+        });
+
+        // Global click listener to close pop-ups when clicking outside
+        window.addEventListener('click', function(event) {
+            // Close "More" menu if click is outside the button and the menu itself
+            if (!moreButton.contains(event.target) && !popupMenu.contains(event.target)) {
+                if (!popupMenu.classList.contains('hidden-element')) {
+                    popupMenu.classList.add('hidden-element');
+                }
+            }
+            // Close profile pop-up if click is outside the button and the pop-up itself
+            if (!profileButton.contains(event.target) && !profilePopup.contains(event.target)) {
+                if (!profilePopup.classList.contains('hidden-element')) {
+                    profilePopup.classList.add('hidden-element');
+                }
+            }
+        });
+
+        // Function to update the clock
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            liveClock.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Update the clock every second
+        setInterval(updateClock, 1000);
+        // Initial call to display clock immediately
+        updateClock();
+    </script>
+</body>
+</html>
