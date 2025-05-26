@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene Writer's Board</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background: #0078D7;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .board {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #0078D7;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056a1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Scene Writer's Board</h1>
+        <p>Create your story!</p>
+    </header>
+    <div class="container">
+        <div class="board">
+            <h2>Film Project Details</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Film Title" id="filmTitle">
+            </div>
+            <div class="form-group">
+                <textarea placeholder="Film Project Description" rows="4" id="filmDescription"></textarea>
+            </div>
+        </div>
+
+        <div class="board">
+            <h2>Sounds</h2>
+            <div class="form-group">
+                <textarea placeholder="Sounds" rows="4" id="sounds"></textarea>
+            </div>
+            <button onclick="brainstormSounds()">Brainstorm ✨</button>
+        </div>
+
+        <div class="board">
+            <h2>Visual</h2>
+            <div class="form-group">
+                <textarea placeholder="Visual" rows="4" id="visual"></textarea>
+            </div>
+            <button onclick="brainstormVisual()">Brainstorm ✨</button>
+        </div>
+
+        <div class="board">
+            <h2>Farm Sounds</h2>
+            <div class="form-group">
+                <textarea placeholder="Farm Sounds" rows="4" id="farmSounds"></textarea>
+            </div>
+            <button onclick="brainstormFarmSounds()">Brainstorm ✨</button>
+        </div>
+
+        <button onclick="generatePDF()">Generate PDF</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        function generateBrainstorm(prompt) {
+            const filmTitle = document.getElementById('filmTitle').value;
+            const filmDescription = document.getElementById('filmDescription').value;
+            const fullPrompt = `${prompt} for a film titled "${filmTitle}" with the following description: ${filmDescription}`;
+            // Call the Gemini API or other AI model to generate brainstorm ideas
+            // For demonstration purposes, we'll just return some sample ideas
+            const ideas = [
+                "Idea 1",
+                "Idea 2",
+                "Idea 3",
+            ];
+            return ideas;
+        }
+
+        function brainstormSounds() {
+            const ideas = generateBrainstorm("Generate sounds");
+            document.getElementById('sounds').value = ideas.join(', ');
+        }
+
+        function brainstormVisual() {
+            const ideas = generateBrainstorm("Generate visual ideas");
+            document.getElementById('visual').value = ideas.join(', ');
+        }
+
+        function brainstormFarmSounds() {
+            const ideas = generateBrainstorm("Generate farm sounds");
+            document.getElementById('farmSounds').value = ideas.join(', ');
+        }
+
+        function generatePDF() {
+            // Generate PDF code here
+        }
+    </script>
+</body>
+</html>

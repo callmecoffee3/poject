@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene Writer's Board</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background: #0078D7;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .board {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #0078D7;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056a1;
+        }
+        .category {
+            margin: 20px 0;
+        }
+        .user-info {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Scene Writer's Board</h1>
+        <p>Add your creative ideas!</p>
+    </header>
+    <div class="container">
+        <div class="board">
+            <h2>Scene Details</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Scene Title" id="sceneTitle">
+            </div>
+            <div class="form-group">
+                <textarea placeholder="Scene Description" rows="4" id="sceneDescription"></textarea>
+            </div>
+            <button onclick="addScene()">Add Scene</button>
+        </div>
+
+        <div class="category">
+            <h2>Characters</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Character Name" id="characterName">
+            </div>
+            <div class="form-group">
+                <textarea placeholder="Character Description" rows="4" id="characterDescription"></textarea>
+            </div>
+            <button onclick="addCharacter()">Add Character</button>
+        </div>
+
+        <div class="category">
+            <h2>Situations</h2>
+            <div class="form-group">
+                <textarea placeholder="Situation" rows="4" id="situation"></textarea>
+            </div>
+            <button onclick="addSituation()">Add Situation</button>
+        </div>
+
+        <div class="category">
+            <h2>Problems</h2>
+            <div class="form-group">
+                <textarea placeholder="Problem" rows="4" id="problem"></textarea>
+            </div>
+            <button onclick="addProblem()">Add Problem</button>
+        </div>
+
+        <div class="category">
+            <h2>Props</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Prop Name" id="propName">
+            </div>
+            <button onclick="addProp()">Add Prop</button>
+        </div>
+
+        <div class="category">
+            <h2>Animals</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Animal Name" id="animalName">
+            </div>
+            <button onclick="addAnimal()">Add Animal</button>
+        </div>
+
+        <div class="category">
+            <h2>Plants</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Plant Name" id="plantName">
+            </div>
+            <button onclick="addPlant()">Add Plant</button>
+        </div>
+
+        <div class="category">
+            <h2>Fears</h2>
+            <div class="form-group">
+                <textarea placeholder="Fear" rows="4" id="fear"></textarea>
+            </div>
+            <button onclick="addFear()">Add Fear</button>
+        </div>
+
+        <div class="user-info">
+            <h2>User Information</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Your Name" id="userName">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Your Email" id="userEmail">
+            </div>
+            <button onclick="addUserInfo()">Add User Info</button>
+        </div>
+
+        <button onclick="generatePDF()">Generate PDF</button>
+    </div>
+
+    <script>
+        const data = {
+            scenes: [],
+            characters: [],
+            situations: [],
+            problems: [],
+            props: [],
+            animals: [],
+            plants: [],
+            fears: [],
+            userInfo: {}
+        };
+
+        function addScene() {
+            const title = document.getElementById('sceneTitle').value;
+            const description = document.getElementById('sceneDescription').value;
+            data.scenes.push({ title, description });
+            console.log(`Scene Added: ${title} - ${description}`);
+        }
+
+        function addCharacter() {
+            const name = document.getElementById('characterName').value;
+            const description = document.getElementById('characterDescription').value;
+            data.characters.push({ name, description });
+            console.log(`Character Added: ${name} - ${description}`);
+        }
+
+        function addSituation() {
+            const situation = document.getElementById('situation').value;
+            data.situations.push(situation);
+            console.log(`Situation Added: ${situation}`);
+        }
+
+        function addProblem() {
+            const problem = document.getElementById('problem').value;
+            data.problems.push(problem);
+            console.log(`Problem Added: ${problem}`);
+        }
+
+        function addProp() {
+            const propName = document.getElementById('propName').value;
+            data.props.push(propName);
+            console.log(`Prop Added: ${propName}`);
+        }
+
+        function addAnimal() {
+            const animalName = document.getElementById('animalName').value;
+            data.animals.push(animalName);
+            console.log(`Animal Added: ${animalName}`);
+        }
+
+        function addPlant() {
+            const plantName = document.getElementById('plantName').value;
+            data.plants.push(plantName);
+            console.log(`Plant Added: ${plantName}`);
+        }
+
+        function addFear() {
+            const fear = document.getElementById('fear').value;
+            data.fears.push(fear);
+            console.log(`Fear Added: ${fear}`);
+        }
+
+        function addUserInfo() {
+            const name = document.getElementById('userName').value;
+            const email = document.getElementById('userEmail').value;
+            data.userInfo = { name, email };
+            console.log(`User Info Added: ${name} - ${email}`);
+        }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(16);
+            doc.text("Scene Writer's Board", 20, 20);
+            doc.setFontSize(12);
+            doc.text("User Information:", 20, 40);
+            doc.text(`Name: ${data.userInfo.name}`, 20, 50);
+            doc.text(`Email: ${data.userInfo.email}`, 20, 60);
+
+            doc.text("Scenes:", 20, 80);
+            data.scenes.forEach((scene, index) => {
+                doc.text(`${index + 1}. ${scene.title} - ${scene.description}`, 20, 90 + (index * 10));
+            });
+
+            doc.text("Characters:", 20, 90 + (data.scenes.length * 10) + 20);
+            data.characters.forEach((character, index) => {
+                doc.text(`${index + 1}. ${character.name} - ${character.description}`, 20, 100 + (data.scenes.length * 10) + (index * 10) + 20);
+            });
+
+            doc.text("Situations:", 20, 100 + (data.scenes.length * 10) + (data.characters.length * 10) + 40);
+            data.situations.forEach((situation, index) => {
+                doc.text(`${index + 1}. ${situation}`, 20, 110 + (data.scenes.length * 10) + (data.characters.length * 10) + (index * 10) + 40);
+            });
+
+            doc.text("Problems:", 20, 110 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + 60);
+            data.problems.forEach((problem, index) => {
+                doc.text(`${index + 1}. ${problem}`, 20, 120 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (index * 10) + 60);
+            });
+
+            doc.text("Props:", 20, 120 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + 80);
+            data.props.forEach((prop, index) => {
+                doc.text(`${index + 1}. ${prop}`, 20, 130 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (index * 10) + 80);
+            });
+
+            doc.text("Animals:", 20, 130 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (data.props.length * 10) + 100);
+            data.animals.forEach((animal, index) => {
+                doc.text(`${index + 1}. ${animal}`, 20, 140 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (data.props.length * 10) + (index * 10) + 100);
+            });
+
+            doc.text("Plants:", 20, 140 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (data.props.length * 10) + (data.animals.length * 10) + 120);
+            data.plants.forEach((plant, index) => {
+                doc.text(`${index + 1}. ${plant}`, 20, 150 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (data.props.length * 10) + (data.animals.length * 10) + (index * 10) + 120);
+            });
+
+            doc.text("Fears:", 20, 150 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (data.props.length * 10) + (data.animals.length * 10) + (data.plants.length * 10) + 140);
+            data.fears.forEach((fear, index) => {
+                doc.text(`${index + 1}. ${fear}`, 20, 160 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (data.props.length * 10) + (data.animals.length * 10) + (data.plants.length * 10) + (index * 10) + 140);
+            });
+
+            doc.save("scene_writers_board.pdf");
+        }
+    </script>
+</body>
+</html>

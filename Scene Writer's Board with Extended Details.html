@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene Writer's Board</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background: #0078D7;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .board {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #0078D7;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056a1;
+        }
+        .category {
+            margin: 20px 0;
+        }
+        .user-info {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Scene Writer's Board</h1>
+        <p>Add your creative ideas!</p>
+    </header>
+    <div class="container">
+        <div class="board">
+            <h2>Film Project Details</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Film Title" id="filmTitle">
+            </div>
+            <div class="form-group">
+                <textarea placeholder="Film Project Description" rows="4" id="filmDescription"></textarea>
+            </div>
+        </div>
+
+        <div class="board">
+            <h2>Scene Details</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Scene Title" id="sceneTitle">
+            </div>
+            <div class="form-group">
+                <textarea placeholder="Scene Description" rows="4" id="sceneDescription"></textarea>
+            </div>
+            <button onclick="addScene()">Add Scene</button>
+        </div>
+
+        <div class="category">
+            <h2>Main Goal</h2>
+            <div class="form-group">
+                <textarea placeholder="Main Goal" rows="2" id="mainGoal"></textarea>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>Hopes & Dreams</h2>
+            <div class="form-group">
+                <textarea placeholder="Hopes & Dreams" rows="2" id="hopesDreams"></textarea>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>Conflict</h2>
+            <div class="form-group">
+                <textarea placeholder="Conflict" rows="2" id="conflict"></textarea>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>Point of View (POV)</h2>
+            <div class="form-group">
+                <textarea placeholder="POV" rows="2" id="pov"></textarea>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>Beat Boxing Sounds</h2>
+            <div class="form-group">
+                <textarea placeholder="Beat Boxing Sounds" rows="2" id="beatBoxingSounds"></textarea>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>Close Ups</h2>
+            <div class="form-group">
+                <textarea placeholder="Close Ups" rows="2" id="closeUps"></textarea>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>Resolutions</h2>
+            <div class="form-group">
+                <textarea placeholder="Resolutions" rows="2" id="resolutions"></textarea>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>The Strip</h2>
+            <div class="form-group">
+                <textarea placeholder="The Strip" rows="2" id="theStrip"></textarea>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>The Fear</h2>
+            <div class="form-group">
+                <textarea placeholder="The Fear" rows="2" id="theFear"></textarea>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>Daily</h2>
+            <div class="form-group">
+                <textarea placeholder="Daily" rows="2" id="daily"></textarea>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>Goal of Scene</h2>
+            <div class="form-group">
+                <textarea placeholder="Goal of Scene" rows="2" id="goalOfScene"></textarea>
+            </div>
+        </div>
+
+        <div class="user-info">
+            <h2>User Information</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Your Name" id="userName">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Your Email" id="userEmail">
+            </div>
+            <button onclick="addUserInfo()">Add User Info</button>
+        </div>
+
+        <button onclick="generatePDF()">Generate PDF</button>
+    </div>
+
+    <script>
+        const data = {
+            filmTitle: '',
+            filmDescription: '',
+            scenes: [],
+            mainGoal: '',
+            hopesDreams: '',
+            conflict: '',
+            pov: '',
+            beatBoxingSounds: '',
+            closeUps: '',
+            resolutions: '',
+            theStrip: '',
+            theFear: '',
+            daily: '',
+            goalOfScene: '',
+            characters: [],
+            situations: [],
+            problems: [],
+            props: [],
+            animals: [],
+            plants: [],
+            fears: [],
+            userInfo: {}
+        };
+
+        function addFilmDetails() {
+            data.filmTitle = document.getElementById('filmTitle').value;
+            data.filmDescription = document.getElementById('filmDescription').value;
+            data.mainGoal = document.getElementById('mainGoal').value;
+            data.hopesDreams = document.getElementById('hopesDreams').value;
+            data.conflict = document.getElementById('conflict').value;
+            data.pov = document.getElementById('pov').value;
+            data.beatBoxingSounds = document.getElementById('beatBoxingSounds').value;
+            data.closeUps = document.getElementById('closeUps').value;
+            data.resolutions = document.getElementById('resolutions').value;
+            data.theStrip = document.getElementById('theStrip').value;
+            data.theFear = document.getElementById('theFear').value;
+            data.daily = document.getElementById('daily').value;
+            data.goalOfScene = document.getElementById('goalOfScene').value;
+        }
+
+        function addScene() {
+            const title = document.getElementById('sceneTitle').value;
+            const description = document.getElementById('sceneDescription').value;
+            data.scenes.push({ title, description });
+            console.log(`Scene Added: ${title} - ${description}`);
+        }
+
+        function addCharacter() {
+            const name = document.getElementById('characterName').value;
+            const description = document.getElementById('characterDescription').value;
+            data.characters.push({ name, description });
+            console.log(`Character Added: ${name} - ${description}`);
+        }
+
+        function addSituation() {
+            const situation = document.getElementById('situation').value;
+            data.situations.push(situation);
+            console.log(`Situation Added: ${situation}`);
+        }
+
+        function addProblem() {
+            const problem = document.getElementById('problem').value;
+            data.problems.push(problem);
+            console.log(`Problem Added: ${problem}`);
+        }
+
+        function addProp() {
+            const propName = document.getElementById('propName').value;
+            data.props.push(propName);
+            console.log(`Prop Added: ${propName}`);
+        }
+
+        function addAnimal() {
+            const animalName = document.getElementById('animalName').value;
+            data.animals.push(animalName);
+            console.log(`Animal Added: ${animalName}`);
+        }
+
+        function addPlant() {
+            const plantName = document.getElementById('plantName').value;
+            data.plants.push(plantName);
+            console.log(`Plant Added: ${plantName}`);
+        }
+
+        function addFear() {
+            const fear = document.getElementById('fear').value;
+            data.fears.push(fear);
+            console.log(`Fear Added: ${fear}`);
+        }
+
+        function addUserInfo() {
+            const name = document.getElementById('userName').value;
+            const email = document.getElementById('userEmail').value;
+            data.userInfo = { name, email };
+            console.log(`User Info Added: ${name} - ${email}`);
+        }
+
+        function generatePDF() {
+            addFilmDetails(); // Ensure film details and additional info are included in the PDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(16);
+            doc.text("Scene Writer's Board", 20, 20);
+            doc.setFontSize(12);
+            doc.text("Film Title: " + data.filmTitle, 20, 40);
+            doc.text("Film Description: " + data.filmDescription, 20, 50);
+            doc.text("Main Goal: " + data.mainGoal, 20, 60);
+            doc.text("Hopes & Dreams: " + data.hopesDreams, 20, 70);
+            doc.text("Conflict: " + data.conflict, 20, 80);
+            doc.text("POV: " + data.pov, 20, 90);
+            doc.text("Beat Boxing Sounds: " + data.beatBoxingSounds, 20, 100);
+            doc.text("Close Ups: " + data.closeUps, 20, 110);
+            doc.text("Resolutions: " + data.resolutions, 20, 120);
+            doc.text("The Strip: " + data.theStrip, 20, 130);
+            doc.text("The Fear: " + data.theFear, 20, 140);
+            doc.text("Daily: " + data.daily, 20, 150);
+            doc.text("Goal of Scene: " + data.goalOfScene, 20, 160);
+            doc.text("User Information:", 20, 180);
+            doc.text(`Name: ${data.userInfo.name}`, 20, 190);
+            doc.text(`Email: ${data.userInfo.email}`, 20, 200);
+
+            doc.text("Scenes:", 20, 220);
+            data.scenes.forEach((scene, index) => {
+                doc.text(`${index + 1}. ${scene.title} - ${scene.description}`, 20, 230 + (index * 10));
+            });
+
+            doc.text("Characters:", 20, 230 + (data.scenes.length * 10) + 20);
+            data.characters.forEach((character, index) => {
+                doc.text(`${index + 1}. ${character.name} - ${character.description}`, 20, 240 + (data.scenes.length * 10) + (index * 10) + 20);
+            });
+
+            doc.text("Situations:", 20, 240 + (data.scenes.length * 10) + (data.characters.length * 10) + 40);
+            data.situations.forEach((situation, index) => {
+                doc.text(`${index + 1}. ${situation}`, 20, 250 + (data.scenes.length * 10) + (data.characters.length * 10) + (index * 10) + 40);
+            });
+
+            doc.text("Problems:", 20, 250 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + 60);
+            data.problems.forEach((problem, index) => {
+                doc.text(`${index + 1}. ${problem}`, 20, 260 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (index * 10) + 60);
+            });
+
+            doc.text("Props:", 20, 260 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + 80);
+            data.props.forEach((prop, index) => {
+                doc.text(`${index + 1}. ${prop}`, 20, 270 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (index * 10) + 80);
+            });
+
+            doc.text("Animals:", 20, 270 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (data.props.length * 10) + 100);
+            data.animals.forEach((animal, index) => {
+                doc.text(`${index + 1}. ${animal}`, 20, 280 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (data.props.length * 10) + (index * 10) + 100);
+            });
+
+            doc.text("Plants:", 20, 280 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (data.props.length * 10) + (data.animals.length * 10) + 120);
+            data.plants.forEach((plant, index) => {
+                doc.text(`${index + 1}. ${plant}`, 20, 290 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (data.props.length * 10) + (data.animals.length * 10) + (index * 10) + 120);
+            });
+
+            doc.text("Fears:", 20, 290 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (data.props.length * 10) + (data.animals.length * 10) + (data.plants.length * 10) + 140);
+            data.fears.forEach((fear, index) => {
+                doc.text(`${index + 1}. ${fear}`, 20, 300 + (data.scenes.length * 10) + (data.characters.length * 10) + (data.situations.length * 10) + (data.problems.length * 10) + (data.props.length * 10) + (data.animals.length * 10) + (data.plants.length * 10) + (index * 10) + 140);
+            });
+
+            doc.save("scene_writers_board.pdf");
+        }
+    </script>
+</body>
+</html>

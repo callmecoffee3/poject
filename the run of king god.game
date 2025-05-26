@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Run of King God</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #1a1a1a;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        #game-container {
+            width: 100%;
+            max-width: 1000px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #2d3748;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #game-title {
+            font-size: 2.5rem;
+            color: #f6e05e;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 12px rgba(255, 223, 0, 0.7);
+            padding-top: 2rem;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        #game-canvas {
+            width: 100%;
+            height: 60%;
+            background-color: #4a5568;
+            border-bottom: 6px solid #718096;
+            display: block;
+            border-radius: 8px 8px 0 0;
+        }
+
+        #controls-container {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            height: 20%;
+            padding: 2rem 0;
+        }
+
+        .controls-button {
+            padding: 0.8rem 1.6rem;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #e53e3e;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 1rem;
+            transition: background-color 0.3s, transform 0.2s;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .controls-button:hover {
+            background-color: #c53030;
+            transform: scale(1.05);
+        }
+
+        .controls-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        #message-box {
+            position: absolute;
+            top: 12%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 1.2rem;
+            border-radius: 8px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5);
+        }
+
+        .show-message {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .show-message.error {
+            background-color: #e53e3e;
+        }
+
+        /* Styles for larger screens */
+        @media (min-width: 1200px) {
+            #game-container {
+                max-width: 1200px;
+            }
+            #game-title {
+                font-size: 4rem;
+            }
+            .controls-button {
+                font-size: 1.2rem;
+                padding: 1rem 2rem;
+            }
+        }
+
+        /* Landscape orientation adjustments for mobile */
+        @media (max-height: 400px) {
+            #game-container {
+                flex-direction: row;
+                max-height: 100vh;
+                height: auto;
+            }
+            #game-title {
+                font-size: 2rem;
+                padding-top: 1rem;
+                margin-bottom: 1rem;
+            }
+            #game-canvas {
+                width: 60%;
+                height: 100%;
+                border-bottom: none;
+                border-right: 6px solid #718096;
+                border-radius: 8px 0 0 8px;
+            }
+            #controls-container {
+                width: 40%;
+                height: 100%;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+                padding: 0 1.5rem;
+            }
+            .controls-button {
+                margin: 0.75rem 0;
+                font-size: 0.9rem;
+                padding: 0.75rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1 id="game-title">The Run of King God</h1>
+        <canvas id="game-canvas"></canvas>
+        <div id="controls-container">
+            <button class="controls-button" id="play-button">Play</button>
+            <button class="controls-button" id="summon-hero" style="display:none;">Summon Warrior</button>
+            <button class="controls-button" id="upgrade-castle" style="display:none;">Fortify Defense</button>
+            <button class="controls-button" id="start-wave" style="display:none;">Challenge</button>
+            <button class="controls-button" id="auto-play" style="display:none;">Auto Challenge</button>
+        </div>
+        <div id="message-box"></div>
+    </div>
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const gameContainer = document.getElementById('game-container');
+        const summonHeroButton = document.getElementById('summon-hero');
+        const upgradeCastleButton = document.getElementById('upgrade-castle');
+        const startWaveButton = document.getElementById('start-wave');
+        const autoPlayButton = document.getElementById('auto-play');
+        const messageBox = document.getElementById('message-box');
+        const playButton = document.getElementById('play-button');
+
+
+        const GAME_WIDTH = 800;
+        const GAME_HEIGHT = 600;
+
+        canvas.width = GAME_WIDTH;
+        canvas.height = GAME_HEIGHT;
+
+        let heroes = [];
+        let enemies = [];
+        let castleHP = 100;
+        let wave = 1;
+        let isAutoPlay = false;
+        let animationId;
+        let gameStarted = false;
+
+        // Updated images to reflect the theme
+        const warriorImg = new Image();
+        warriorImg.src = 'https://via.placeholder.com/40x40/00FFFF/000000?text=Warrior';
+        const enemyImg = new Image();
+        enemyImg.src = 'https://via.placeholder.com/40x40/FF4500/FFFFFF?text=Foe';
+        const castleImg = new Image();
+        castleImg.src = 'https://via.placeholder.com/60x60/BDB76B/000000?text=Fortress';
+
+        warriorImg.onload = () => {};
+        enemyImg.onload = () => {};
+        castleImg.onload = () => {};
+
+        function showMessage(message, type = 'info') {
+            messageBox.textContent = message;
+            messageBox.className = 'show-message';
+            if (type === 'error') {
+                messageBox.classList.add('error');
+            }
+            setTimeout(() => {
+                messageBox.className = '';
+            }, 3000);
+        }
+
+        function drawPixelated(context, image, x, y, width, height) {
+            context.save();
+            context.imageSmoothingEnabled = false;
+            context.mozImageSmoothingEnabled = false;
+            context.webkitImageSmoothingEnabled = false;
+            context.msImageSmoothingEnabled = false;
+            context.drawImage(image, x, y, width, height);
+            context.restore();
+        }
+
+        function startGame() {
+            if (animationId) cancelAnimationFrame(animationId);
+            heroes = [];
+            enemies = [];
+            castleHP = 100;
+            wave = 1;
+            isAutoPlay = false;
+            autoPlayButton.textContent = 'Auto Challenge';
+            resizeCanvas();
+            gameLoop();
+            gameStarted = true;
+            summonHeroButton.style.display = 'block';
+            upgradeCastleButton.style.display = 'block';
+            startWaveButton.style.display = 'block';
+            autoPlayButton.style.display = 'block';
+            playButton.style.display = 'none';
+        }
+
+        function resizeCanvas() {
+            const containerWidth = gameContainer.offsetWidth;
+            const containerHeight = gameContainer.offsetHeight;
+
+            if (containerWidth / containerHeight > GAME_WIDTH / GAME_HEIGHT) {
+                canvas.height = containerHeight;
+                canvas.width = containerHeight * (GAME_WIDTH / GAME_HEIGHT);
+            } else {
+                canvas.width = containerWidth;
+                canvas.height = containerWidth * (GAME_HEIGHT / GAME_WIDTH);
+            }
+        }
+
+        function createHero(x, y) {
+            heroes.push({
+                x: x,
+                y: y,
+                hp: 12,
+                damage: 7,
+                speed: 3,
+                width: 30,
+                height: 30,
+                color: 'cyan',
+                draw: function() {
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                }
+            });
+        }
+
+        function createEnemy(x, y) {
+            enemies.push({
+                x: x,
+                y: y,
+                hp: 20,
+                damage: 5,
+                speed: 1.5,
+                width: 30,
+                height: 30,
+                color: 'orangered',
+                draw: function() {
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                }
+            });
+        }
+
+        function drawCastle() {
+            const castleX = canvas.width / 2 - 30;
+            const castleY = canvas.height - 70;
+            // Replace image drawing with a simple rectangle
+            ctx.fillStyle = 'darkkhaki';
+            ctx.fillRect(castleX, castleY, 60, 60);
+            ctx.fillStyle = '#fff';
+            ctx.font = '1rem "Press Start 2P"';
+            ctx.textAlign = 'center';
+            ctx.fillText(`HP: ${castleHP}`, castleX + 30, castleY + 80);
+        }
+
+        function drawHeroes() {
+            heroes.forEach(hero => {
+                hero.draw();
+            });
+        }
+
+        function drawEnemies() {
+            enemies.forEach(enemy => {
+                enemy.draw();
+            });
+        }
+
+        function moveHeroes() {
+            heroes.forEach(hero => {
+                let closestEnemy = null;
+                let minDistance = Infinity;
+                enemies.forEach(enemy => {
+                    const distance = Math.hypot(enemy.x - hero.x, enemy.y - hero.y);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestEnemy = enemy;
+                    }
+                });
+
+                if (closestEnemy) {
+                    const dx = closestEnemy.x - hero.x;
+                    const dy = closestEnemy.y - hero.y;
+                    const angle = Math.atan2(dy, dx);
+                    hero.x += Math.cos(angle) * hero.speed;
+                    hero.y += Math.sin(angle) * hero.speed;
+                }
+            });
+        }
+
+        function moveEnemies() {
+            enemies.forEach(enemy => {
+                enemy.y += enemy.speed;
+            });
+        }
+
+       function handleCollisions() {
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                const enemy = enemies[i];
+                const castleX = canvas.width / 2 - 30;
+                const castleY = canvas.height - 70;
+                const distanceToCastle = Math.hypot(enemy.x - castleX - 30, enemy.y - castleY - 30);
+
+                if (distanceToCastle < 35) {
+                    castleHP -= enemy.damage;
+                    enemies.splice(i, 1);
+                    if (castleHP <= 0) {
+                        gameOver();
+                        return;
+                    }
+                }
+            }
+
+            for (let i = heroes.length - 1; i >= 0; i--) {
+                const hero = heroes[i];
+                for (let j = enemies.length - 1; j >= 0; j--) {
+                    const enemy = enemies[j];
+                    const distance = Math.hypot(enemy.x - hero.x, enemy.y - hero.y);
+                    if (distance < 30) {
+                        hero.hp -= enemy.damage;
+                        enemy.hp -= hero.damage;
+                        if (hero.hp <= 0) {
+                            heroes.splice(i, 1);
+                        }
+                        if (enemy.hp <= 0) {
+                            enemies.splice(j, 1);
+                        }
+                        if (heroes.length <= 0) {
+                            gameOver();
+                            return;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        function spawnWave() {
+            for (let i = 0; i < wave * 3; i++) {
+                createEnemy(Math.random() * (canvas.width - 40), 0);
+            }
+            wave++;
+        }
+
+        function gameOver() {
+            isAutoPlay = false;
+            autoPlayButton.textContent = 'Auto Challenge';
+            cancelAnimationFrame(animationId);
+            showMessage(`Defeat! Wave: ${wave}, Fortress HP: ${castleHP}`, 'error');
+            setTimeout(startGame, 5000);
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawCastle();
+            drawHeroes();
+            drawEnemies();
+            moveHeroes();
+            moveEnemies();
+            handleCollisions();
+
+            if (enemies.length === 0 && wave > 1) {
+                spawnWave();
+            }
+
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        summonHeroButton.addEventListener('click', () => {
+            createHero(Math.random() * (canvas.width - 50), canvas.height - 120);
+            showMessage('Warrior Ready!');
+        });
+
+        upgradeCastleButton.addEventListener('click', () => {
+            castleHP += 30;
+            showMessage('Defense Strengthened!');
+        });
+
+        startWaveButton.addEventListener('click', () => {
+            spawnWave();
+            showMessage(`Challenge Wave ${wave}!`);
+        });
+
+        autoPlayButton.addEventListener('click', () => {
+            isAutoPlay = !isAutoPlay;
+            autoPlayButton.textContent = isAutoPlay ? 'Stop Challenge' : 'Auto Challenge';
+            if (isAutoPlay) {
+                spawnWave();
+                gameLoop();
+            } else {
+                cancelAnimationFrame(animationId);
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+
+        playButton.addEventListener('click', () => {
+            startGame();
+        });
+
+    </script>
+</body>
+</html>

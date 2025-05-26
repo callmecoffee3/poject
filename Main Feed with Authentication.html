@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Matt Grosso Show</title>
+  <style>
+      body {
+          background-color: #f0f2f5;
+          font-family: Arial, sans-serif;
+          margin: 0;
+          display: flex;
+          transition: margin-left 0.3s;
+      }
+      header {
+          background: #3b5998;
+          padding: 10px 20px;
+          color: white;
+          text-align: center;
+          width: 100%;
+          position: relative;
+      }
+      nav {
+          margin: 20px 0;
+      }
+      nav a {
+          color: white;
+          margin: 0 15px;
+          text-decoration: none;
+      }
+      .top-menu {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+      }
+      .search-bar {
+          flex: 1;
+          margin: 0 10px;
+      }
+      .search-bar input {
+          width: 100%;
+          padding: 8px;
+          border-radius: 5px;
+          border: none;
+      }
+      .user-info {
+          display: flex;
+          align-items: center;
+      }
+      .user-info img {
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          margin-right: 10px;
+      }
+      .sidebar {
+          width: 200px;
+          background: #add8e6; /* Light Blue Color */
+          border: 2px solid black; /* Black Border */
+          padding: 15px;
+          position: fixed;
+          height: 100%;
+          overflow-y: auto;
+          transition: transform 0.3s ease;
+          transform: translateX(0);
+      }
+      .sidebar.hidden {
+          transform: translateX(-100%);
+      }
+      .account-sidebar {
+          width: 200px;
+          background: #d1e7dd; /* Light Green Color */
+          border: 2px solid black; /* Black Border */
+          padding: 15px;
+          position: fixed;
+          height: 100%;
+          right: 0;
+          overflow-y: auto;
+          transition: transform 0.3s ease;
+          transform: translateX(100%);
+      }
+      .account-sidebar.open {
+          transform: translateX(0);
+      }
+      .sidebar h3, .account-sidebar h3 {
+          margin-top: 0;
+      }
+      .container {
+          margin-left: 220px; /* Space for sidebar */
+          margin-right: 220px; /* Space for account sidebar */
+          max-width: 800px;
+          padding: 20px;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+          transition: margin-left 0.3s, margin-right 0.3s;
+      }
+      .post-form {
+          margin-bottom: 20px;
+          padding: 15px;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          background: #f9f9f9;
+      }
+      .post {
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          padding: 15px;
+          margin-bottom: 20px;
+      }
+      .post h3 {
+          margin: 0 0 10px;
+      }
+      .post p {
+          margin: 0 0 10px;
+      }
+      .actions {
+          margin-top: 10px;
+      }
+      footer {
+          text-align: center;
+          padding: 10px 0;
+          background: #3b5998;
+          color: white;
+          position: relative;
+          bottom: 0;
+          width: 100%;
+      }
+      .toggle-btn {
+          cursor: pointer;
+          background: #3b5998;
+          color: white;
+          border: none;
+          padding: 10px;
+          border-radius: 5px;
+          position: absolute;
+          left: 10px;
+          top: 10px;
+          z-index: 1;
+      }
+      .toggle-account-btn {
+          cursor: pointer;
+          background: #3b5998;
+          color: white;
+          border: none;
+          padding: 10px;
+          border-radius: 5px;
+          position: absolute;
+          right: 10px;
+          top: 10px;
+          z-index: 1;
+      }
+      .visitor-counter {
+          margin: 10px 0;
+          font-size: 18px;
+          font-weight: bold;
+          color: #333;
+      }
+      .auth-buttons {
+          margin-left: 10px;
+      }
+  </style>
+</head>
+<body>
+  <header>
+      <div class="top-menu">
+          <h1>The Matt Grosso Show</h1>
+          <div class="search-bar">
+              <input type="text" placeholder="Search...">
+          </div>
+          <div class="user-info">
+              <div class="online-indicator"></div>
+              <img src="user1.jpg" alt="User 1" id="userImage" style="display:none;">
+              <span id="username" style="display:none;">User 1</span>
+              <button onclick="showSettings()">⚙️</button>
+              <div class="auth-buttons">
+                  <button id="loginBtn" onclick="showLogin()">Login</button>
+                  <button id="signupBtn" onclick="showSignup()">Signup</button>
+                  <button id="logoutBtn" onclick="logout()" style="display:none;">Logout</button>
+              </div>
+          </div>
+      </div>
+      <nav>
+          <a href="about.html">About</a>
+          <a href="episodes.html">Episodes</a>
+          <a href="guests.html">Guests</a>
+          <a href="blog.html">Blog</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="shop.html">Shop</a>
+          <a href="events.html">Events</a>
+          <a href="contact.html">Contact</a>
+          <a href="faq.html">FAQ</a>
+      </nav>
+      <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+      <button class="toggle-account-btn" onclick="toggleAccountSidebar()">⚙️</button>
+  </header>
+  
+  <aside class="sidebar" id="sidebar">
+      <h3>Menu</h3>
+      <ul>
+          <li><a href="home.html" onclick="navigateTo('home.html')">Home</a></li>
+          <li><a href="profile.html" onclick="navigateTo('profile.html')">Profile</a></li>
+          <li><a href="user-posts.html" onclick="navigateTo('user-posts.html')">User Posts</a></li>
+          <li><a href="friends.html" onclick="navigateTo('friends.html')">Friends</a></li>
+          <li><a href="groups.html" onclick="navigateTo('groups.html')">Groups</a></li>
+          <li><a href="messages.html" onclick="navigateTo('messages.html')">Messages</a></li>
+          <li><a href="videos.html" onclick="navigateTo('videos.html')">Videos</a></li>
+      </ul>
+  </aside>
+
+  <aside class="account-sidebar" id="accountSidebar">
+      <h3>Account Settings</h3>
+      <ul>
+          <li><a href="account-overview.html" onclick="navigateTo('account-overview.html')">Overview</a></li>
+          <li><a href="account-settings.html" onclick="navigateTo('account-settings.html')">Settings</a></li>
+          <li><a href="account-security.html" onclick="navigateTo('account-security.html')">Security</a></li>
+          <li><a href="account-privacy.html" onclick="navigateTo('account-privacy.html')">Privacy</a></li>
+      </ul>
+  </aside>
+
+  <div class="container" id="container">
+      <h2>Main Feed</h2>
+      
+      <!-- Visitor Counter -->
+      <div class="visitor-counter" id="visitorCounter">Visitors: 0</div>
+
+      <!-- Add Post Form -->
+      <div class="post-form">
+          <h3>Add a New Post</h3>
+          <form id="addPostForm" onsubmit="submitPost(event)">
+              <label for="postTitle">Post Title</label>
+              <input type="text" id="postTitle" name="postTitle" required>
+
+              <label for="postContent">Post Content</label>
+              <textarea id="postContent" name="postContent" rows="5" required></textarea>
+
+              <label for="postImage">Upload Image</label>
+              <input type="file" id="postImage" name="postImage" accept="image/*">
+
+              <button type="submit">Submit Post</button>
+          </form>
+      </div>
+
+      <div id="postsContainer">
+          <!-- Posts will be dynamically added here -->
+      </div>
+
+      <footer>
+          <p>&copy; 2025 The Matt Grosso Show</p>
+      </footer>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="loginModal" style="display:none;">
+      <h3>Login</h3>
+      <form onsubmit="login(event)">
+          <label for="loginEmail">Email:</label>
+          <input type="email" id="loginEmail" required>
+          <label for="loginPassword">Password:</label>
+          <input type="password" id="loginPassword" required>
+          <button type="submit">Login</button>
+          <button type="button" onclick="closeLogin()">Cancel</button>
+      </form>
+  </div>
+
+  <!-- Signup Modal -->
+  <div id="signupModal" style="display:none;">
+      <h3>Signup</h3>
+      <form onsubmit="signup(event)">
+          <label for="signupUsername">Username:</label>
+          <input type="text" id="signupUsername" required>
+          <label for="signupEmail">Email:</label>
+          <input type="email" id="signupEmail" required>
+          <label for="signupPassword">Password:</label>
+          <input type="password" id="signupPassword" required>
+          <button type="submit">Signup</button>
+          <button type="button" onclick="closeSignup()">Cancel</button>
+      </form>
+  </div>
+
+  <script>
+      let visitorCount = 0;
+      let isLoggedIn = false;
+
+      function toggleSidebar() {
+          const sidebar = document.getElementById('sidebar');
+          const container = document.getElementById('container');
+          sidebar.classList.toggle('hidden');
+          container.style.marginLeft = sidebar.classList.contains('hidden') ? '20px' : '220px';
+      }
+
+      function toggleAccountSidebar() {
+          const accountSidebar = document.getElementById('accountSidebar');
+          accountSidebar.classList.toggle('open');
+          const container = document.getElementById('container');
+          container.style.marginRight = accountSidebar.classList.contains('open') ? '220px' : '20px';
+      }
+
+      function submitPost(event) {
+          event.preventDefault();
+          if (!isLoggedIn) {
+              alert("Please log in to add a post.");
+              return;
+          }
+          const title = document.getElementById('postTitle').value;
+          const content = document.getElementById('postContent').value;
+          const image = document.getElementById('postImage').files[0];
+
+          // Create a new post element
+          const postContainer = document.createElement('div');
+          postContainer.classList.add('post');
+
+          const postTitle = document.createElement('h3');
+          postTitle.textContent = title;
+
+          const postContent = document.createElement('p');
+          postContent.textContent = content;
+
+          if (image) {
+              const img = document.createElement('img');
+              img.src = URL.createObjectURL(image);
+              img.alt = title;
+              img.style.width = '100%'; // Adjust image size
+              postContainer.appendChild(img);
+          }
+
+          postContainer.appendChild(postTitle);
+          postContainer.appendChild(postContent);
+
+          // Add the new post to the posts container
+          document.getElementById('postsContainer').prepend(postContainer);
+
+          // Increment visitor count (simulating a post submission as a visitor)
+          visitorCount++;
+          document.getElementById('visitorCounter').textContent = `Visitors: ${visitorCount}`;
+
+          // Reset the form
+          document.getElementById('addPostForm').reset();
+      }
+
+      function showLogin() {
+          document.getElementById('loginModal').style.display = 'block';
+      }
+
+      function closeLogin() {
+          document.getElementById('loginModal').style.display = 'none';
+      }
+
+      function login(event) {
+          event.preventDefault();
+          const email = document.getElementById('loginEmail').value;
+          const password = document.getElementById('loginPassword').value;
+
+          // Simulate login logic (replace with actual authentication)
+          if (email && password) {
+              isLoggedIn = true;
+              document.getElementById('username').textContent = email.split('@')[0];
+              document.getElementById('username').style.display = 'inline';
+              document.getElementById('userImage').style.display = 'inline';
+              document.getElementById('loginBtn').style.display = 'none';
+              document.getElementById('signupBtn').style.display = 'none';
+              document.getElementById('logoutBtn').style.display = 'inline';
+              closeLogin();
+          }
+      }
+
+      function showSignup() {
+          document.getElementById('signupModal').style.display = 'block';
+      }
+
+      function closeSignup() {
+          document.getElementById('signupModal').style.display = 'none';
+      }
+
+      function signup(event) {
+          event.preventDefault();
+          const username = document.getElementById('signupUsername').value;
+          const email = document.getElementById('signupEmail').value;
+          const password = document.getElementById('signupPassword').value;
+
+          // Simulate signup logic (replace with actual registration)
+          if (username && email && password) {
+              alert("Signup successful! You can now log in.");
+              closeSignup();
+          }
+      }
+
+      function logout() {
+          isLoggedIn = false;
+          document.getElementById('username').style.display = 'none';
+          document.getElementById('userImage').style.display = 'none';
+          document.getElementById('loginBtn').style.display = 'inline';
+          document.getElementById('signupBtn').style.display = 'inline';
+          document.getElementById('logoutBtn').style.display = 'none';
+      }
+
+      function navigateTo(page) {
+          alert(`Navigating to ${page}...`);
+          // Here you can implement actual navigation, e.g., window.location.href = page;
+      }
+
+      function showSettings() {
+          alert('Opening settings...');
+          // Here you can redirect to a settings page, e.g., window.location.href = 'settings.html';
+      }
+  </script>
+</body>
+</html>

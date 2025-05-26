@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Run of King God</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background: #0078D7;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .board {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #0078D7;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056a1;
+        }
+        .category {
+            margin: 20px 0;
+        }
+        .user-info {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .scene {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>The Run of King God</h1>
+        <p>Create your story!</p>
+    </header>
+    <div class="container">
+        <div class="board">
+            <h2>Story Details</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Story Title" id="storyTitle" value="The Run of King God">
+            </div>
+            <div class="form-group">
+                <textarea placeholder="Story Description" rows="4" id="storyDescription">In a world where gods and mortals coexist, King God embarks on a perilous journey to reclaim his throne.</textarea>
+            </div>
+        </div>
+
+        <div class="board">
+            <h2>Scenes</h2>
+            <div id="sceneContainer">
+                <div class="scene">
+                    <div class="form-group">
+                        <input type="text" placeholder="Scene Title" class="sceneTitle" value="The King's Departure">
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Scene Description" rows="2" class="sceneDescription">King God sets out on his journey, determined to reclaim his throne.</textarea>
+                    </div>
+                </div>
+                <div class="scene">
+                    <div class="form-group">
+                        <input type="text" placeholder="Scene Title" class="sceneTitle" value="The Dark Forest">
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Scene Description" rows="2" class="sceneDescription">King God navigates through the treacherous Dark Forest, facing numerous challenges along the way.</textarea>
+                    </div>
+                </div>
+            </div>
+            <button onclick="addScene()">Add Scene</button>
+        </div>
+
+        <div class="user-info">
+            <h2>Author Information</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Your Name" id="authorName" value="Your Name">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Your Email" id="authorEmail" value="your.email@example.com">
+            </div>
+            <button onclick="addAuthorInfo()">Add Author Info</button>
+        </div>
+
+        <button onclick="generatePDF()">Generate PDF</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        let data = {
+            storyTitle: '',
+            storyDescription: '',
+            scenes: [],
+            authorInfo: {}
+        };
+
+        function collectStoryDetails() {
+            data.storyTitle = document.getElementById('storyTitle').value;
+            data.storyDescription = document.getElementById('storyDescription').value;
+        }
+
+        function collectScenes() {
+            const sceneTitles = document.querySelectorAll('.sceneTitle');
+            const sceneDescriptions = document.querySelectorAll('.sceneDescription');
+            data.scenes = [];
+            sceneTitles.forEach((titleInput, index) => {
+                const title = titleInput.value;
+                const description = sceneDescriptions[index].value;
+                if (title || description) {
+                    data.scenes.push({ title, description });
+                }
+            });
+        }
+
+        function addScene() {
+            const sceneContainer = document.getElementById('sceneContainer');
+            const sceneDiv = document.createElement('div');
+            sceneDiv.className = 'scene';
+            sceneDiv.innerHTML = `
+                <div class="form-group">
+                    <input type="text" placeholder="Scene Title" class="sceneTitle">
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="Scene Description" rows="2" class="sceneDescription"></textarea>
+                </div>
+            `;
+            sceneContainer.appendChild(sceneDiv);
+        }
+
+        function addAuthorInfo() {
+            const name = document.getElementById('authorName').value;
+            const email = document.getElementById('authorEmail').value;
+            data.authorInfo = { name, email };
+            console.log(`Author Info Added: ${name} - ${email}`);
+        }
+
+        function generatePDF() {
+            collectStoryDetails();
+            collectScenes();
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(16);
+            doc.text(data.storyTitle, 20, 20);
+            doc.setFontSize(12);
+            doc.text(data.storyDescription, 20, 30);
+
+            let y = 50;
+            doc.text("Scenes:", 20, y);
+            y += 10;
+            data.scenes.forEach((scene) => {
+                doc.text(`Title: ${scene.title}`, 20, y);
+                y += 10;
+                doc.text(`Description: ${scene.description}`, 20, y);
+                y += 20;
+            });
+
+            doc.text("Author Information:", 20, y);
+            y += 10;
+            doc.text(`Name: ${data.authorInfo.name}`, 20, y);
+            y += 10;
+            doc.text(`Email: ${data.authorInfo.email}`, 20, y);
+
+            doc.save("the_run_of_king_god.pdf");
+        }
+    </script>
+</body>
+</html>

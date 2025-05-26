@@ -1,0 +1,166 @@
+<!-- Index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wisons 10</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">Wisons 10</a></li>
+                <li><a href="#">Eltccebok</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Desktop Background -->
+    <div class="desktop-background">
+        <img src="landscape.jpg" alt="Landscape Photo">
+        <h1>Wosamss of Sartce 10</h1>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="start-button">Start</button>
+        <div class="system-tray">
+            <span class="clock">12:34</span>
+            <span class="volume-icon"></span>
+            <span class="network-icon"></span>
+            <span class="battery-icon"></span>
+        </div>
+    </div>
+
+    <!-- Windows -->
+    <div class="window-container">
+        <div class="window whisctar-10">
+            <h2>Whisctar 10</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+        <div class="window vldinon-si-facelvoln10">
+            <h2>Vldinon Si Facelvoln10</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+        <div class="window facebnool">
+            <h2>Facebnool</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+        <div class="window facelock">
+            <h2>Facelock</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+        <div class="window dimeofunk">
+            <h2>Dimeofunk</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+    </div>
+
+    <!-- Icons -->
+    <div class="icon-container">
+        <div class="icon f-icon"></div>
+        <div class="icon b-icon"></div>
+    </div>
+</body>
+</html>
+
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1em;
+    text-align: center;
+}
+
+.desktop-background {
+    background-image: url('landscape.jpg');
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.taskbar {
+    background-color: #333;
+    color: #fff;
+    padding: 1em;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+.start-button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 1em;
+    cursor: pointer;
+}
+
+.system-tray {
+    float: right;
+}
+
+.clock {
+    font-size: 1.5em;
+    margin-right: 1em;
+}
+
+.volume-icon, .network-icon, .battery-icon {
+    font-size: 1.5em;
+    margin-right: 1em;
+}
+
+.window-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.window {
+    background-color: #fff;
+    padding: 1em;
+    margin: 1em;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.window h2 {
+    margin-top: 0;
+}
+
+.icon-container {
+    display: flex;
+    justify-content: center;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    background-color: #333;
+    margin: 1em;
+    border-radius: 50%;
+}
+
+.f-icon {
+    background-image: url('f-icon.png');
+    background-size: cover;
+}
+
+.b-icon {
+    background-image: url('b-icon.png');
+    background-size: cover;
+}

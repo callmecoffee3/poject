@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Run of King God</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background: #0078D7;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .board {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #0078D7;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056a1;
+        }
+        .category {
+            margin: 20px 0;
+        }
+        .user-info {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .scene {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+<div class="board">
+    <h2>Notes</h2>
+    <textarea placeholder="Notes" rows="4" id="notes"></textarea>
+</div>
+
+<div class="board">
+    <h2>Tags</h2>
+    <input type="text" placeholder="Tags" id="tags" value="King God, Zombies, Fantasy, Action">
+</div>        
+<div class="board">
+    <h2>Story Title</h2>
+    <input type="text" placeholder="Story Title" id="storyTitle" value="The Run of King God vs Zombies">
+    <input type="text" placeholder="Subtitle" id="storySubtitle" value="A Tale of Survival">
+</div>
+
+<div class="board">
+    <h2>Copyright Information</h2>
+    <input type="text" placeholder="Copyright" id="copyright" value="2023 Your Name. All rights reserved.">
+</div>        
+<div class="board">
+    <h2>Type of Story</h2>
+    <select id="storyType">
+        <option value="Fantasy">Fantasy</option>
+        <option value="Science Fiction">Science Fiction</option>
+        <option value="Action">Action</option>
+        <option value="Adventure">Adventure</option>
+        <option value="Romance">Romance</option>
+        <option value="Horror">Horror</option>
+        <option value="Mystery">Mystery</option>
+        <option value="Thriller">Thriller</option>
+    </select>
+</div>
+
+<div class="board">
+    <h2>Tags</h2>
+    <input type="text" placeholder="Tags" id="tags" value="King God, Zombies, Fantasy, Action">
+</div>        
+    </style>
+</head>
+<body>
+    <header>
+        <h1>The Run of King God</h1>
+        <p>Create your story!</p>
+    </header>
+    <div class="container">
+        <div class="board">
+            <h2>Story Details</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Story Title" id="storyTitle" value="The Run of King God vs Zombies">
+            </div>
+            <div class="form-group">
+                <textarea placeholder="Story Description" rows="4" id="storyDescription">In a world overrun by zombies, King God must fight his way through hordes of undead to reclaim his throne.</textarea>
+            </div>
+        </div>
+
+        <!-- Additional fields... -->
+        <div class="board">
+            <h2>Characters</h2>
+            <textarea placeholder="Characters" rows="4" id="characters">King God, Zombie Lord, Princess</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Animals</h2>
+            <textarea placeholder="Animals" rows="4" id="animals">Dogs, Horses, Ravens</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Plants</h2>
+            <textarea placeholder="Plants" rows="4" id="plants">Trees, Flowers, Mushrooms</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Vehicles</h2>
+            <textarea placeholder="Vehicles" rows="4" id="vehicles">Horses, Chariots, Boats</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Plots</h2>
+            <textarea placeholder="Plots" rows="4" id="plots">King God vs Zombie Lord, Princess in danger</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Episodes</h2>
+            <textarea placeholder="Episodes" rows="4" id="episodes">Episode 1: The Outbreak, Episode 2: The Battle</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Struggles</h2>
+            <textarea placeholder="Struggles" rows="4" id="struggles">King God vs Zombies, Princess vs danger</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Foes</h2>
+            <textarea placeholder="Foes" rows="4" id="foes">Zombie Lord, Dark Sorcerer</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Friends</h2>
+            <textarea placeholder="Friends" rows="4" id="friends">Princess, Knight</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Relationships</h2>
+            <textarea placeholder="Relationships" rows="4" id="relationships">King God and Princess, Knight and King God</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Users</h2>
+            <textarea placeholder="Users" rows="4" id="users">King God, Princess, Knight</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Platforms</h2>
+            <textarea placeholder="Platforms" rows="4" id="platforms">Web, Mobile, PC</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Fight Scenes</h2>
+            <textarea placeholder="Fight Scenes" rows="4" id="fightScenes">King God vs Zombie Lord, Knight vs Dark Sorcerer</textarea>
+        </div>
+
+        <div class="board">
+            <h2>Scenes</h2>
+            <div id="sceneContainer">
+                <!-- Scenes will be added here -->
+            </div>
+            <button onclick="addScene()">Add Scene</button>
+        </div>
+
+        <div class="user-info">
+            <h2>Author Information</h2>
+            <div class="form-group">
+                <input type="text" placeholder="Your Name" id="authorName" value="Your Name">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Your Email" id="authorEmail" value="your.email@example.com">
+            </div>
+            <button onclick="addAuthorInfo()">Add Author Info</button>
+        </div>
+
+        <button onclick="generatePDF()">Generate PDF</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        let data = {
+            storyTitle: '',
+            storyDescription: '',
+            characters: '',
+            animals: '',
+            plants: '',
+            vehicles: '',
+            plots: '',
+            episodes: '',
+            struggles: '',
+            foes: '',
+            friends: '',
+            relationships: '',
+            users: '',
+            platforms: '',
+            fightScenes: '',
+            scenes: [],
+            authorInfo: {}
+        };
+
+        function collectStoryDetails() {
+            data.storyTitle = document.getElementById('storyTitle').value;
+            data.storyDescription = document.getElementById('storyDescription').value;
+            data.characters = document.getElementById('characters').value;
+            data.animals = document.getElementById('animals').value;
+            data.plants = document.getElementById('plants').value;
+            data.vehicles = document.getElementById('vehicles').value;
+            data.plots = document.getElementById('plots').value;
+            data.episodes = document.getElementById('episodes').value;
+            data.struggles = document.getElementById('struggles').value;
+            data.foes = document.getElementById('foes').value;
+            data.friends = document.getElementById('friends').value;
+            data.relationships = document.getElementById('relationships').value;
+            data.users = document.getElementById('users').value;
+            data.platforms = document.getElementById('platforms').value;
+            data.fightScenes = document.getElementById('fightScenes').value;
+        }
+
+        function collectScenes() {
+            const sceneTitles = document.querySelectorAll('.sceneTitle');
+            const sceneDescriptions = document.querySelectorAll('.sceneDescription');
+            data.scenes = [];
+            sceneTitles.forEach((titleInput, index) => {
+                const title = titleInput.value;
+                const description = sceneDescriptions[index].value;
+                if (title || description) {
+                    data.scenes.push({ title, description });
+                }
+            });
+        }
+
+        function addScene() {
+            const sceneContainer = document.getElementById('sceneContainer');
+            const sceneDiv = document.createElement('div');
+            sceneDiv.className = 'scene';
+            sceneDiv.innerHTML = `
+                <div class="form-group">
+                    <input type="text" placeholder="Scene Title" class="sceneTitle">
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="Scene Description" rows="2" class="sceneDescription"></textarea>
+                </div>
+            `;
+            sceneContainer.appendChild(sceneDiv);
+        }
+
+        function addAuthorInfo() {
+            const name = document.getElementById('authorName').value;
+            const email = document.getElementById('authorEmail').value;
+            data.authorInfo = { name, email };
+            console.log(`Author Info Added: ${name} - ${email}`);
+        }
+
+        function generatePDF() {
+            collectStoryDetails();
+            collectScenes();
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(16);
+            doc.text(data.storyTitle, 20, 20);
+            doc.setFontSize(12);
+            doc.text(data.storyDescription, 20, 30);
+
+            let y = 50;
+            doc.text("Characters:", 20, y);
+            y += 10;
+            doc.text(data.characters, 20, y);
+            y += 20;
+
+            doc.text("Animals:", 20, y);
+            y += 10;
+            doc.text(data.animals, 20, y);
+            y += 20;
+
+            doc.text("Plants:", 20, y);
+            y += 10;
+            doc.text(data.plants, 20, y);
+            y += 20;
+
+            doc.text("Vehicles:", 20, y);
+            y += 10;
+            doc.text(data.vehicles, 20, y);
+            y += 20;
+
+            doc.text("Plots:", 20, y);
+            y += 10;
+            doc.text(data.plots, 20, y);
+            y += 20;
+
+            doc.text("Episodes:", 20, y);
+            y += 10;
+            doc.text(data.episodes, 20, y);
+            y += 20;
+
+            doc.text("Struggles:", 20, y);
+            y += 10;
+            doc.text(data.struggles, 20, y);
+            y += 20;
+
+            doc.text("Foes:", 20, y);
+            y += 10;
+            doc.text(data.foes, 20, y);
+            y += 20;
+
+            doc.text("Friends:", 20, y);
+            y += 10;
+            doc.text(data.friends, 20, y);
+            y += 20;
+
+            doc.text("Relationships:", 20, y);
+            y += 10;
+            doc.text(data.relationships, 20, y);
+            y += 20;
+
+            doc.text("Users:", 20, y);
+            y += 10;
+            doc.text(data.users, 20, y);
+            y += 20;
+
+            doc.text("Platforms:", 20, y);
+            y += 10;
+            doc.text(data.platforms, 20, y);
+            y += 20;
+
+            doc.text("Fight Scenes:", 20, y);
+            y += 10;
+            doc.text(data.fightScenes, 20, y);
+            y += 20;
+
+            doc.text("Scenes:", 20, y);
+            y += 10;
+            data.scenes.forEach((scene) => {
+                doc.text(`Title: ${scene.title}`, 20, y);
+                y += 10;
+                doc.text(`Description: ${scene.description}`, 20, y);
+                y += 20;
+            });
+
+            doc.text("Author Information:", 20, y);
+            y += 10;
+            doc.text(`Name: ${data.authorInfo.name}`, 20, y);
+            y += 10;
+            doc.text(`Email: ${data.authorInfo.email}`, 20, y);
+
+            doc.save("the_run_of_king_god_vs_zombies.pdf");
+        }
+data.storyType = '';
+data.tags = '';
+
+function collectStoryDetails() {
+    // ...
+    data.storyType = document.getElementById('storyType').value;
+    data.tags = document.getElementById('tags').value;
+    // ...
+}
+        data.storyTitle = '';
+data.storySubtitle = '';
+data.copyright = '';
+
+function collectStoryDetails() {
+    data.storyTitle = document.getElementById('storyTitle').value;
+    data.storySubtitle = document.getElementById('storySubtitle').value;
+    data.copyright = document.getElementById('copyright').value;
+    // ...
+}
+
+function generatePDF() {
+    // ...
+    doc.setFontSize(16);
+    doc.text(data.storyTitle, 20, 20);
+    doc.setFontSize(12);
+    doc.text(data.storySubtitle, 20, 30);
+    doc.text(data.storyDescription, 20, 40);
+    // ...
+    doc.text("Copyright:", 20, y);
+    y += 10;
+    doc.text(data.copyright, 20, y);
+    // ...
+}
+        
+function generatePDF() {
+    // ...
+    doc.text("Type of Story:", 20, y);
+    y += 10;
+    doc.text(data.storyType, 20, y);
+    y += 20;
+
+    doc.text("Tags:", 20, y);
+    y += 10;
+    doc.text(data.tags, 20, y);
+    y += 20;
+    // ...
+}   
+data.notes = '';
+data.tags = '';
+
+function collectStoryDetails() {
+    // ...
+    data.notes = document.getElementById('notes').value;
+    data.tags = document.getElementById('tags').value;
+    // ...
+}
+
+function generatePDF() {
+    // ...
+    doc.text("Notes:", 20, y);
+    y += 10;
+    const notesLines = data.notes.split('\n');
+    notesLines.forEach((line) => {
+        doc.text(line, 20, y);
+        y += 10;
+    });
+    y += 10;
+
+    doc.text("Tags:", 20, y);
+    y += 10;
+    doc.text(data.tags, 20, y);
+    // ...
+}
+    </script>
+</body>
+</html>

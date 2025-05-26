@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 10 Mockup with Color Themes</title>
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #00FFFF, #0000FF, #4B0082, #8B00FF);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background-color: rgba(51, 51, 51, 0.8);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+        }
+        .start-button {
+            background-color: #0078D7;
+            border: none;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .search-bar {
+            flex: 1;
+            margin: 0 10px;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+        .clock {
+            margin-left: auto;
+            color: white;
+        }
+        .desktop {
+            position: relative;
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        .icon {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(68, 68, 68, 0.9);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .icon:hover {
+            background-color: rgba(85, 85, 85, 1);
+        }
+        .start-menu {
+            position: absolute;
+            bottom: 50px;
+            left: 10px;
+            background-color: rgba(51, 51, 51, 0.9);
+            border-radius: 5px;
+            display: none;
+            padding: 10px;
+            width: 200px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .popup {
+            position: absolute;
+            width: 300px;
+            height: auto;
+            background-color: rgba(68, 68, 68, 0.9);
+            border-radius: 5px;
+            padding: 10px;
+            display: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .popup-content {
+            margin-top: 10px;
+            color: white;
+        }
+        .close-button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        .options {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            padding: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .option:hover {
+            background-color: rgba(85, 85, 85, 1);
+        }
+        .theme-selector {
+            display: flex;
+            margin: 10px 0;
+        }
+        .theme-button {
+            margin-right: 10px;
+            padding: 5px 10px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-selector">
+        <button class="theme-button" style="background-color: #FF0000;" onclick="changeTheme('#FF0000')">Red</button>
+        <button class="theme-button" style="background-color: #00FF00;" onclick="changeTheme('#00FF00')">Green</button>
+        <button class="theme-button" style="background-color: #0000FF;" onclick="changeTheme('#0000FF')">Blue</button>
+        <label for="customColor">Custom Color:</label>
+        <input type="color" id="customColor" onchange="changeCustomColor(this.value)">
+    </div>
+    <div class="desktop">
+        <div class="icon" data-popup="myComputerPopup">My Computer</div>
+        <div class="icon" data-popup="documentsPopup">Documents</div>
+        <div class="icon" data-popup="picturesPopup">Pictures</div>
+        <div class="icon" data-popup="musicPopup">Music</div>
+        <div class="icon" data-popup="videoPopup">Video</div>
+        <div class="icon" data-popup="gamesPopup">Games</div>
+        <div class="icon" data-popup="storePopup">Store</div>
+        <div class="icon" data-popup="settingsPopup">Settings</div>
+        <div class="icon" data-popup="recycleBinPopup">Recycle Bin</div>
+    </div>
+    <div class="taskbar">
+        <button class="start-button">Start</button>
+        <input type="text" class="search-bar" placeholder="Search...">
+        <div class="clock"></div>
+    </div>
+    <div class="start-menu">
+        <input type="text" class="search-bar" placeholder="Search...">
+        <div class="menu-icon">My Computer</div>
+        <div class="menu-icon">Documents</div>
+        <div class="menu-icon">Pictures</div>
+        <div class="menu-icon">Music</div>
+        <div class="menu-icon">Video</div>
+        <div class="menu-icon">Games</div>
+        <div class="menu-icon">Store</div>
+        <div class="menu-icon">Settings</div>
+        <div class="menu-icon">Recycle Bin</div>
+    </div>
+
+    <!-- Popups -->
+    <div class="popup" id="myComputerPopup">
+        <div class="popup-header">
+            <span>My Computer</span>
+            <button class="close-button" onclick="closePopup('myComputerPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Options for My Computer:</p>
+            <div class="options">
+                <div class="option" onclick="openSubPopup('myComputerSubPopup')">Open</div>
+                <div class="option">Properties</div>
+                <div class="option">Manage</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="documentsPopup">
+        <div class="popup-header">
+            <span>Documents</span>
+            <button class="close-button" onclick="closePopup('documentsPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Options for Documents:</p>
+            <div class="options">
+                <div class="option" onclick="openSubPopup('documentsSubPopup')">Open</div>
+                <div class="option">New Document</div>
+                <div class="option">Properties</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="picturesPopup">
+        <div class="popup-header">
+            <span>Pictures</span>
+            <button class="close-button" onclick="closePopup('picturesPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Options for Pictures:</p>
+            <div class="options">
+                <div class="option" onclick="openSubPopup('picturesSubPopup')">Open</div>
+                <div class="option">New Album</div>
+                <div class="option">Properties</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="musicPopup">
+        <div class="popup-header">
+            <span>Music</span>
+            <button class="close-button" onclick="closePopup('musicPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Options for Music:</p>
+            <div class="options">
+                <div class="option" onclick="openSubPopup('musicSubPopup')">Play</div>
+                <div class="option">New Playlist</div>
+                <div class="option">Properties</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="videoPopup">
+        <div class="popup-header">
+            <span>Video</span>
+            <button class="close-button" onclick="closePopup('videoPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Options for Video:</p>
+            <div class="options">
+                <div class="option" onclick="openSubPopup('videoSubPopup')">Play Video</div>
+                <div class="option">New Video</div>
+                <div class="option">Properties</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="gamesPopup">
+        <div class="popup-header">
+            <span>Games</span>
+            <button class="close-button" onclick="closePopup('gamesPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Options for Games:</p>
+            <div class="options">
+                <div class="option" onclick="openSubPopup('gamesSubPopup')">Play Game</div>
+                <div class="option">New Game</div>
+                <div class="option">Properties</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="storePopup">
+        <div class="popup-header">
+            <span>Store</span>
+            <button class="close-button" onclick="closePopup('storePopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Options for Store:</p>
+            <div class="options">
+                <div class="option">Browse Store</div>
+                <div class="option">Purchase Items</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="settingsPopup">
+        <div class="popup-header">
+            <span>Settings</span>
+            <button class="close-button" onclick="closePopup('settingsPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Options for Settings:</p>
+            <div class="options">
+                <div class="option">Change Settings</div>
+                <div class="option">System Info</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="recycleBinPopup">
+        <div class="popup-header">
+            <span>Recycle Bin</span>
+            <button class="close-button" onclick="closePopup('recycleBinPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Options for Recycle Bin:</p>
+            <div class="options">
+                <div class="option">Empty Recycle Bin</div>
+                <div class="option">Restore Items</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sub Popups -->
+    <div class="popup" id="myComputerSubPopup">
+        <div class="popup-header">
+            <span>My Computer - Open</span>
+            <button class="close-button" onclick="closePopup('myComputerSubPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Sub-options for My Computer:</p>
+            <div class="options">
+                <div class="option">View Files</div>
+                <div class="option">Disk Management</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="documentsSubPopup">
+        <div class="popup-header">
+            <span>Documents - Open</span>
+            <button class="close-button" onclick="closePopup('documentsSubPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Sub-options for Documents:</p>
+            <div class="options">
+                <div class="option">Open Recent</div>
+                <div class="option">Create New Document</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="picturesSubPopup">
+        <div class="popup-header">
+            <span>Pictures - Open</span>
+            <button class="close-button" onclick="closePopup('picturesSubPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Sub-options for Pictures:</p>
+            <div class="options">
+                <div class="option">View Albums</div>
+                <div class="option">Upload New Photo</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="musicSubPopup">
+        <div class="popup-header">
+            <span>Music - Play</span>
+            <button class="close-button" onclick="closePopup('musicSubPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Sub-options for Music:</p>
+            <div class="options">
+                <div class="option">Play Now</div>
+                <div class="option">Add to Playlist</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="videoSubPopup">
+        <div class="popup-header">
+            <span>Video - Play</span>
+            <button class="close-button" onclick="closePopup('videoSubPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Sub-options for Video:</p>
+            <div class="options">
+                <div class="option">Play Selected Video</div>
+                <div class="option">Add to Playlist</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="gamesSubPopup">
+        <div class="popup-header">
+            <span>Games - Play</span>
+            <button class="close-button" onclick="closePopup('gamesSubPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Sub-options for Games:</p>
+            <div class="options">
+                <div class="option">Start Game</div>
+                <div class="option">Game Settings</div>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="storeSubPopup">
+        <div class="popup-header">
+            <span>Store - Browse</span>
+            <button class="close-button" onclick="closePopup('storeSubPopup')">X</button>
+        </div>
+        <div class="popup-content">
+            <p>Sub-options for Store:</p>
+            <div class="options">
+                <div class="option">View Purchases</div>
+                <div class="option">Account Settings</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const startButton = document.querySelector('.start-button');
+        const clockElement = document.querySelector('.clock');
+        const startMenu = document.querySelector('.start-menu');
+        const icons = document.querySelectorAll('.icon');
+
+        startButton.addEventListener('click', () => {
+            startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!startButton.contains(event.target) && !startMenu.contains(event.target)) {
+                startMenu.style.display = 'none';
+            }
+        });
+
+        icons.forEach(icon => {
+            icon.addEventListener('click', () => {
+                const popupId = icon.getAttribute('data-popup');
+                openPopup(popupId);
+            });
+        });
+
+        function openPopup(popupId) {
+            const popup = document.getElementById(popupId);
+            popup.style.display = 'block';
+            popup.style.left = `${Math.random() * (window.innerWidth - 300)}px`;
+            popup.style.top = `${Math.random() * (window.innerHeight - 200)}px`;
+        }
+
+        function closePopup(popupId) {
+            const popup = document.getElementById(popupId);
+            popup.style.display = 'none';
+        }
+
+        function changeTheme(color) {
+            document.body.style.background = color;
+        }
+
+        function changeCustomColor(color) {
+            document.body.style.background = color;
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const options = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            clockElement.textContent = now.toLocaleTimeString([], options);
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock(); // Initial call to display the clock immediately
+    </script>
+</body>
+</html>
